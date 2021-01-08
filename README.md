@@ -1,6 +1,6 @@
 # Goc-Man
 
-Pac-Man-like game written in Golang using SDL2.
+Pac-Man-like game written in [Golang](https://golang.org/) using [raylib](https://www.raylib.com/) and [raylib-go](https://github.com/gen2brain/raylib-go).
 
 ## Installation instructions
 
