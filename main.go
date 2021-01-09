@@ -6,6 +6,7 @@ import (
 )
 
 const spriteSize = 32
+const targetFPS = 60
 
 func main() {
 	windowSize := rl.Vector2{
@@ -19,7 +20,7 @@ func main() {
 	}
 
 	rl.InitWindow(int32(windowSize.X), int32(windowSize.Y), "gocman")
-	rl.SetTargetFPS(60)
+	rl.SetTargetFPS(targetFPS)
 
 	backgroundTexture := rl.LoadTexture("sprites/level.png")
 	foodTexture := rl.LoadTexture("sprites/food.png")
@@ -34,7 +35,7 @@ func main() {
 	for !rl.WindowShouldClose() {
 		if !level.finished {
 			framesCounter += 1
-			if framesCounter >= 60/framesSpeed {
+			if framesCounter >= targetFPS/framesSpeed {
 				framesCounter = 0
 				for _, movable := range movables {
 					movable.Update()
@@ -43,6 +44,16 @@ func main() {
 
 			for _, movable := range movables {
 				movable.ProcessInput()
+			}
+
+			if rl.IsKeyPressed(rl.KeyKpAdd) {
+				framesSpeed += 1
+			}
+			if rl.IsKeyPressed(rl.KeyKpSubtract) {
+				framesSpeed -= 1
+				if framesSpeed < 1 {
+					framesSpeed = 1
+				}
 			}
 		}
 
