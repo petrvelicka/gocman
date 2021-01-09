@@ -7,6 +7,7 @@ import (
 
 const spriteSize = 32
 const targetFPS = 60
+const defaultFrameSpeed = 4
 
 func main() {
 	windowSize := rl.Vector2{
@@ -30,7 +31,7 @@ func main() {
 	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
 
 	framesCounter := 0
-	framesSpeed := 3
+	framesSpeed := defaultFrameSpeed
 
 	for !rl.WindowShouldClose() {
 		if !level.finished {
@@ -54,6 +55,9 @@ func main() {
 				if framesSpeed < 1 {
 					framesSpeed = 1
 				}
+			}
+			if rl.IsKeyPressed(rl.KeyKpEnter) {
+				framesSpeed = defaultFrameSpeed
 			}
 		}
 
