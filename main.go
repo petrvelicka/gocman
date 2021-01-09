@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gen2brain/raylib-go/raylib"
 	"log"
 )
@@ -19,19 +18,36 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(level.state)
-
 	rl.InitWindow(int32(windowSize.X), int32(windowSize.Y), "gocman")
 	rl.SetTargetFPS(60)
 
 	backgroundTexture := rl.LoadTexture("sprites/level.png")
 
+	var movables []Movable
+
+	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
+
+	framesCounter := 0
+	framesSpeed := 3
+
 	for !rl.WindowShouldClose() {
+		framesCounter += 1
+		if framesCounter >= 60/framesSpeed {
+			framesCounter = 0
+			for _, movable := range movables {
+				movable.Update()
+			}
+		}
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
 
 		rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
+
+		for _, movable := range movables {
+			movable.ProcessInput()
+			movable.Draw()
+		}
 
 		rl.EndDrawing()
 	}

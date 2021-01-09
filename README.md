@@ -9,3 +9,7 @@ Pac-Man-like game written in [Golang](https://golang.org/) using [raylib](https:
 ## Reporting bugs
 
 Feel free to report a bug or make a pull request if you find one.
+
+## Credits
+
+Renee French for the sprite of Gopher
