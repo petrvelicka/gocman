@@ -22,6 +22,7 @@ func main() {
 	rl.SetTargetFPS(60)
 
 	backgroundTexture := rl.LoadTexture("sprites/level.png")
+	foodTexture := rl.LoadTexture("sprites/food.png")
 
 	var movables []Movable
 
@@ -31,13 +32,20 @@ func main() {
 	framesSpeed := 3
 
 	for !rl.WindowShouldClose() {
-		framesCounter += 1
-		if framesCounter >= 60/framesSpeed {
-			framesCounter = 0
+		if !level.finished {
+			framesCounter += 1
+			if framesCounter >= 60/framesSpeed {
+				framesCounter = 0
+				for _, movable := range movables {
+					movable.Update()
+				}
+			}
+
 			for _, movable := range movables {
-				movable.Update()
+				movable.ProcessInput()
 			}
 		}
+
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
@@ -45,8 +53,15 @@ func main() {
 		rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
 
 		for _, movable := range movables {
-			movable.ProcessInput()
 			movable.Draw()
+		}
+
+		for i, line := range level.state {
+			for j, elem := range line {
+				if elem == FOOD {
+					rl.DrawTexture(foodTexture, int32(j*spriteSize), int32(i*spriteSize), rl.RayWhite)
+				}
+			}
 		}
 
 		rl.EndDrawing()

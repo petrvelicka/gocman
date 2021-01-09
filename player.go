@@ -1,28 +1,39 @@
 package main
 
 import (
-	"fmt"
 	rl "github.com/gen2brain/raylib-go/raylib"
 )
 
 type Player struct {
-	lvl *Level
-	dead bool
+	lvl      *Level
+	lives    int
 	position rl.Vector2
-	speed rl.Vector2
-	texture rl.Texture2D
+	speed    rl.Vector2
+	texture  rl.Texture2D
 }
 
 func (p *Player) Update() {
-	if p.lvl.state[int(p.position.Y + p.speed.Y)][int(p.position.X + p.speed.X)]== 0 {
-		fmt.Println(p.speed)
+	next := p.lvl.state[int(p.position.Y+p.speed.Y)][int(p.position.X+p.speed.X)]
+	if next == EMPTY || next == FOOD || next == POWERUP {
+		if next == FOOD {
+			p.lvl.foodLeft -= 1
+		}
+		p.lvl.state[int(p.position.Y)][int(p.position.X)] = EMPTY
 		p.position.X += p.speed.X
 		p.position.Y += p.speed.Y
+		p.lvl.state[int(p.position.Y)][int(p.position.X)] = PLAYER
+		if p.lvl.foodLeft == 0 {
+			p.lvl.finished = true
+		}
+	} else if next == ENEMY {
+		p.lives -= 1
+		if p.lives == 0 {
+			p.lvl.finished = true
+		}
 	} else {
 		p.speed.X = 0
 		p.speed.Y = 0
 	}
-	fmt.Println(p.position)
 }
 
 func (p *Player) ProcessInput() {
@@ -45,7 +56,7 @@ func (p *Player) ProcessInput() {
 }
 
 func (p *Player) Draw() {
-	rl.DrawTexture(p.texture, int32(p.position.X * spriteSize), int32(p.position.Y * spriteSize), rl.RayWhite)
+	rl.DrawTexture(p.texture, int32(p.position.X*spriteSize), int32(p.position.Y*spriteSize), rl.RayWhite)
 }
 
 func newPlayer(position rl.Vector2, level *Level, texturePath string) (p *Player) {
@@ -54,6 +65,6 @@ func newPlayer(position rl.Vector2, level *Level, texturePath string) (p *Player
 	p.position = position
 	p.lvl = level
 	p.lvl.state[int(p.position.X)][int(p.position.Y)] = -1
-	p.dead = false
+	p.lives = 3
 	return
 }

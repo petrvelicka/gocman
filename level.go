@@ -8,8 +8,19 @@ import (
 )
 
 type Level struct {
-	state [][]int
+	state    [][]int
+	finished bool
+	foodLeft int
 }
+
+const (
+	ENEMY   = -2
+	PLAYER  = -1
+	EMPTY   = 0
+	WALL    = 1
+	FOOD    = 2
+	POWERUP = 3
+)
 
 func makeLevel(path string) (Level, error) {
 	level := Level{}
@@ -34,8 +45,13 @@ func makeLevel(path string) (Level, error) {
 	for i, line := range leveldef {
 		for j, char := range line {
 			level.state[i][j], _ = strconv.Atoi(string(char))
+			if level.state[i][j] == FOOD {
+				level.foodLeft += 1
+			}
 		}
 	}
+
+	level.finished = false
 
 	return level, nil
 }
