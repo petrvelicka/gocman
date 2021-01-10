@@ -7,7 +7,7 @@ import (
 
 const spriteSize = 32
 const targetFPS = 60
-const defaultFrameSpeed = 4
+const defaultFrameSpeed = 3
 
 func main() {
 	windowSize := rl.Vector2{
@@ -67,9 +67,14 @@ func main() {
 
 		rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
 
+		info := ""
+
 		for _, movable := range movables {
 			movable.Draw()
+			info += movable.GetStat()
 		}
+
+		rl.DrawText(info, 20, 650, 20, rl.Blue)
 
 		for i, line := range level.state {
 			for j, elem := range line {

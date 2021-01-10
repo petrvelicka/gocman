@@ -2,11 +2,13 @@ package main
 
 import (
 	rl "github.com/gen2brain/raylib-go/raylib"
+	"strconv"
 )
 
 type Player struct {
 	lvl      *Level
 	lives    int
+	score    int
 	position rl.Vector2
 	speed    rl.Vector2
 	texture  rl.Texture2D
@@ -16,6 +18,7 @@ func (p *Player) Update() {
 	next := p.lvl.state[int(p.position.Y+p.speed.Y)][int(p.position.X+p.speed.X)]
 	if next == EMPTY || next == FOOD || next == POWERUP {
 		if next == FOOD {
+			p.score += 10
 			p.lvl.foodLeft -= 1
 		}
 		p.lvl.state[int(p.position.Y)][int(p.position.X)] = EMPTY
@@ -59,6 +62,10 @@ func (p *Player) Draw() {
 	rl.DrawTexture(p.texture, int32(p.position.X*spriteSize), int32(p.position.Y*spriteSize), rl.RayWhite)
 }
 
+func (p *Player) GetStat() string {
+	return "Lives left: " + strconv.Itoa(p.lives) + "\nScore: " + strconv.Itoa(p.score)
+}
+
 func newPlayer(position rl.Vector2, level *Level, texturePath string) (p *Player) {
 	p = &Player{}
 	p.texture = rl.LoadTexture(texturePath)
@@ -66,5 +73,6 @@ func newPlayer(position rl.Vector2, level *Level, texturePath string) (p *Player
 	p.lvl = level
 	p.lvl.state[int(p.position.X)][int(p.position.Y)] = -1
 	p.lives = 3
+	p.score = 0
 	return
 }

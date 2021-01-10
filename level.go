@@ -50,7 +50,6 @@ func makeLevel(path string) (Level, error) {
 			}
 		}
 	}
-
 	level.finished = false
 
 	return level, nil
