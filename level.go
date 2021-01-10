@@ -16,8 +16,8 @@ type Level struct {
 const (
 	ENEMY   = -2
 	PLAYER  = -1
-	EMPTY   = 0
-	WALL    = 1
+	WALL    = 0
+	EMPTY   = 1
 	FOOD    = 2
 	POWERUP = 3
 )

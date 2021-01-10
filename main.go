@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/gen2brain/raylib-go/raylib"
 	"log"
+	"math/rand"
+	"time"
 )
 
 const spriteSize = 32
@@ -10,6 +12,8 @@ const targetFPS = 60
 const defaultFrameSpeed = 3
 
 func main() {
+	rand.Seed(time.Now().Unix())
+
 	windowSize := rl.Vector2{
 		X: 1280,
 		Y: 720,
@@ -29,6 +33,9 @@ func main() {
 	var movables []Movable
 
 	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
+	movables = append(movables, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
+	movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
+	movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
 
 	framesCounter := 0
 	framesSpeed := defaultFrameSpeed
