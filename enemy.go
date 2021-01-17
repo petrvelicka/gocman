@@ -13,9 +13,9 @@ const (
 )
 
 type Enemy struct {
-	lvl      *Level
-	position rl.Vector2
-	texture  rl.Texture2D
+	lvl        *Level
+	position   rl.Vector2
+	texture    rl.Texture2D
 	savedState int
 }
 
@@ -26,7 +26,7 @@ func (e *Enemy) Update() {
 
 		switch direction {
 		case NORTH:
-			if e.lvl.state[int(e.position.Y - 1)][int(e.position.X)] > 0 {
+			if e.lvl.state[int(e.position.Y-1)][int(e.position.X)] > 0 {
 				e.lvl.state[int(e.position.Y)][int(e.position.X)] = e.savedState
 				e.position.Y -= 1
 				e.savedState = e.lvl.state[int(e.position.Y)][int(e.position.X)]
@@ -35,7 +35,7 @@ func (e *Enemy) Update() {
 			}
 			break
 		case SOUTH:
-			if e.lvl.state[int(e.position.Y + 1)][int(e.position.X)] > 0 {
+			if e.lvl.state[int(e.position.Y+1)][int(e.position.X)] > 0 {
 				e.lvl.state[int(e.position.Y)][int(e.position.X)] = e.savedState
 				e.position.Y += 1
 				e.savedState = e.lvl.state[int(e.position.Y)][int(e.position.X)]
@@ -44,7 +44,7 @@ func (e *Enemy) Update() {
 			}
 			break
 		case EAST:
-			if e.lvl.state[int(e.position.Y)][int(e.position.X + 1)] > 0 {
+			if e.lvl.state[int(e.position.Y)][int(e.position.X+1)] > 0 {
 				e.lvl.state[int(e.position.Y)][int(e.position.X)] = e.savedState
 				e.position.X += 1
 				e.savedState = e.lvl.state[int(e.position.Y)][int(e.position.X)]
@@ -53,7 +53,7 @@ func (e *Enemy) Update() {
 			}
 			break
 		case WEST:
-			if e.lvl.state[int(e.position.Y)][int(e.position.X - 1)] > 0 {
+			if e.lvl.state[int(e.position.Y)][int(e.position.X-1)] > 0 {
 				e.lvl.state[int(e.position.Y)][int(e.position.X)] = e.savedState
 				e.position.X -= 1
 				e.savedState = e.lvl.state[int(e.position.Y)][int(e.position.X)]

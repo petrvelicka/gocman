@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gen2brain/raylib-go/raylib"
 	"log"
 	"math/rand"
@@ -47,8 +46,6 @@ func main() {
 
 	framesCounter := 0
 	framesSpeed := defaultFrameSpeed
-
-	fmt.Println(level.gameState)
 
 	for !rl.WindowShouldClose() {
 		rl.UpdateMusicStream(backgroundMusic)
