@@ -7,10 +7,16 @@ import (
 	"strings"
 )
 
+const (
+	MAINMENU = iota
+	INGAME
+	FINISHED
+)
+
 type Level struct {
-	state    [][]int
-	finished bool
-	foodLeft int
+	state     [][]int
+	gameState int
+	foodLeft  int
 }
 
 const (
@@ -50,7 +56,7 @@ func makeLevel(path string) (Level, error) {
 			}
 		}
 	}
-	level.finished = false
+	level.gameState = MAINMENU
 
 	return level, nil
 }

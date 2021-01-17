@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gen2brain/raylib-go/raylib"
 	"log"
 	"math/rand"
@@ -35,6 +36,8 @@ func main() {
 	backgroundTexture := rl.LoadTexture("sprites/level.png")
 	foodTexture := rl.LoadTexture("sprites/food.png")
 
+	mainMenuTexture := rl.LoadTexture("sprites/mainmenu.png")
+
 	var movables []Movable
 
 	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
@@ -45,9 +48,11 @@ func main() {
 	framesCounter := 0
 	framesSpeed := defaultFrameSpeed
 
+	fmt.Println(level.gameState)
+
 	for !rl.WindowShouldClose() {
 		rl.UpdateMusicStream(backgroundMusic)
-		if !level.finished {
+		if level.gameState == INGAME {
 			framesCounter += 1
 			if framesCounter >= targetFPS/framesSpeed {
 				framesCounter = 0
@@ -73,26 +78,34 @@ func main() {
 				framesSpeed = defaultFrameSpeed
 			}
 		}
+		if level.gameState == MAINMENU {
+			if rl.IsKeyPressed(rl.KeySpace) {
+				level.gameState = INGAME
+			}
+		}
 
 		rl.BeginDrawing()
 
 		rl.ClearBackground(rl.RayWhite)
 
-		rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
-
-		info := ""
-
-		for _, movable := range movables {
-			movable.Draw()
-			info += movable.GetStat()
+		if level.gameState == MAINMENU {
+			rl.DrawTexture(mainMenuTexture, 0, 0, rl.RayWhite)
 		}
+		if level.gameState == INGAME {
+			rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
+			info := ""
+			for _, movable := range movables {
+				movable.Draw()
+				info += movable.GetStat()
+			}
 
-		rl.DrawText(info, 20, 650, 20, rl.Blue)
+			rl.DrawText(info, 20, 650, 20, rl.Blue)
 
-		for i, line := range level.state {
-			for j, elem := range line {
-				if elem == FOOD {
-					rl.DrawTexture(foodTexture, int32(j*spriteSize), int32(i*spriteSize), rl.RayWhite)
+			for i, line := range level.state {
+				for j, elem := range line {
+					if elem == FOOD {
+						rl.DrawTexture(foodTexture, int32(j*spriteSize), int32(i*spriteSize), rl.RayWhite)
+					}
 				}
 			}
 		}

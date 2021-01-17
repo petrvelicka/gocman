@@ -6,13 +6,13 @@ import (
 )
 
 type Player struct {
-	lvl      *Level
-	lives    int
-	score    int
+	lvl           *Level
+	lives         int
+	score         int
 	startPosition rl.Vector2
-	position rl.Vector2
-	speed    rl.Vector2
-	texture  rl.Texture2D
+	position      rl.Vector2
+	speed         rl.Vector2
+	texture       rl.Texture2D
 }
 
 func (p *Player) Update() {
@@ -27,14 +27,14 @@ func (p *Player) Update() {
 		p.position.Y += p.speed.Y
 		p.lvl.state[int(p.position.Y)][int(p.position.X)] = PLAYER
 		if p.lvl.foodLeft == 0 {
-			p.lvl.finished = true
+			p.lvl.gameState = FINISHED
 		}
 	} else if next == ENEMY {
 		p.lives -= 1
 		p.lvl.state[int(p.position.Y)][int(p.position.X)] = EMPTY
 		p.position = p.startPosition
 		if p.lives == 0 {
-			p.lvl.finished = true
+			p.lvl.gameState = FINISHED
 		}
 	} else {
 		p.speed.X = 0
