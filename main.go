@@ -25,6 +25,11 @@ func main() {
 	}
 
 	rl.InitWindow(int32(windowSize.X), int32(windowSize.Y), "gocman")
+	rl.InitAudioDevice()
+
+	backgroundMusic := rl.LoadMusicStream("audio/background.mp3")
+	rl.PlayMusicStream(backgroundMusic)
+
 	rl.SetTargetFPS(targetFPS)
 
 	backgroundTexture := rl.LoadTexture("sprites/level.png")
@@ -41,6 +46,7 @@ func main() {
 	framesSpeed := defaultFrameSpeed
 
 	for !rl.WindowShouldClose() {
+		rl.UpdateMusicStream(backgroundMusic)
 		if !level.finished {
 			framesCounter += 1
 			if framesCounter >= targetFPS/framesSpeed {
