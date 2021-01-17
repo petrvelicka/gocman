@@ -37,6 +37,9 @@ func main() {
 
 	mainMenuTexture := rl.LoadTexture("sprites/mainmenu.png")
 
+	winTexture := rl.LoadTexture("sprites/winscreen.png")
+	loseTexture := rl.LoadTexture("sprites/losescreen.png")
+
 	var movables []Movable
 
 	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
@@ -80,6 +83,20 @@ func main() {
 				level.gameState = INGAME
 			}
 		}
+		if level.gameState == FINISHED {
+			if rl.IsKeyPressed(rl.KeySpace) {
+				level, err = makeLevel("level.txt")
+				if err != nil {
+					log.Fatal(err)
+				}
+				level.gameState = INGAME
+				movables = []Movable{}
+				movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
+				movables = append(movables, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
+				movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
+				movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
+			}
+		}
 
 		rl.BeginDrawing()
 
@@ -106,7 +123,13 @@ func main() {
 				}
 			}
 		}
-
+		if level.gameState == FINISHED {
+			if level.foodLeft == 0 {
+				rl.DrawTexture(winTexture, 0, 0, rl.RayWhite)
+			} else {
+				rl.DrawTexture(loseTexture, 0, 0, rl.RayWhite)
+			}
+		}
 		rl.EndDrawing()
 	}
 
