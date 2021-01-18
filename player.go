@@ -39,6 +39,8 @@ func (p *Player) Update() {
 		}
 	} else if next == ENEMY {
 		p.lives -= 1
+		loseSound := rl.LoadSound("audio/lose.mp3")
+		rl.PlaySound(loseSound)
 		p.score -= 100
 		if p.score < 0 {
 			p.score = 0

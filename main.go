@@ -28,6 +28,7 @@ func main() {
 	rl.InitAudioDevice()
 
 	backgroundMusic := rl.LoadMusicStream("audio/background.mp3")
+	rl.SetMusicVolume(backgroundMusic, 0.5)
 	rl.PlayMusicStream(backgroundMusic)
 
 	rl.SetTargetFPS(targetFPS)
@@ -96,6 +97,8 @@ func main() {
 		if level.gameState == MAINMENU {
 			if rl.IsKeyPressed(rl.KeySpace) {
 				level.gameState = INGAME
+				rl.StopMusicStream(backgroundMusic)
+				rl.PlayMusicStream(backgroundMusic)
 			}
 		}
 		if level.gameState == FINISHED {
@@ -111,6 +114,8 @@ func main() {
 				enemies = append(enemies, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
 				enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
 				enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
+				rl.StopMusicStream(backgroundMusic)
+				rl.PlayMusicStream(backgroundMusic)
 			}
 		}
 
