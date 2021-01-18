@@ -40,13 +40,15 @@ func main() {
 	winTexture := rl.LoadTexture("sprites/winscreen.png")
 	loseTexture := rl.LoadTexture("sprites/losescreen.png")
 
-	var movables []Movable
+	player := newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png")
 
-	movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
-	movables = append(movables, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
-	movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
-	movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
+	var enemies []Movable
 
+	enemies = append(enemies, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
+	enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
+	enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
+	scatterCounter := 30
+	isScatter := false
 	framesCounter := 0
 	framesSpeed := defaultFrameSpeed
 
@@ -56,14 +58,26 @@ func main() {
 			framesCounter += 1
 			if framesCounter >= targetFPS/framesSpeed {
 				framesCounter = 0
-				for _, movable := range movables {
-					movable.Update()
+				player.Update()
+				for _, movable := range enemies {
+					if !isScatter {
+						randomX := float32(rand.Intn(15) - 7)
+						randomY := float32(rand.Intn(15) - 7)
+						movable.SetTarget(rl.Vector2{X: player.position.X + randomX, Y: player.position.Y + randomY})
+						movable.Update()
+					} else {
+						movable.SetDefaultTarget()
+						movable.Update()
+					}
+				}
+
+				scatterCounter -= 1
+				if scatterCounter == 0 {
+					scatterCounter = 30
+					isScatter = !isScatter
 				}
 			}
-
-			for _, movable := range movables {
-				movable.ProcessInput()
-			}
+			player.ProcessInput()
 
 			if rl.IsKeyPressed(rl.KeyKpAdd) {
 				framesSpeed += 1
@@ -77,6 +91,7 @@ func main() {
 			if rl.IsKeyPressed(rl.KeyKpEnter) {
 				framesSpeed = defaultFrameSpeed
 			}
+
 		}
 		if level.gameState == MAINMENU {
 			if rl.IsKeyPressed(rl.KeySpace) {
@@ -90,11 +105,12 @@ func main() {
 					log.Fatal(err)
 				}
 				level.gameState = INGAME
-				movables = []Movable{}
-				movables = append(movables, newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png"))
-				movables = append(movables, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
-				movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
-				movables = append(movables, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
+				player = newPlayer(rl.Vector2{X: 5, Y: 5}, &level, "sprites/gopher.png")
+
+				enemies = []Movable{}
+				enemies = append(enemies, newEnemy(rl.Vector2{X: 5, Y: 14}, &level, "sprites/enemy.png"))
+				enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 5}, &level, "sprites/enemy.png"))
+				enemies = append(enemies, newEnemy(rl.Vector2{X: 33, Y: 14}, &level, "sprites/enemy.png"))
 			}
 		}
 
@@ -107,10 +123,10 @@ func main() {
 		}
 		if level.gameState == INGAME {
 			rl.DrawTexture(backgroundTexture, 0, 0, rl.RayWhite)
-			info := ""
-			for _, movable := range movables {
+			player.Draw()
+			info := player.GetStat()
+			for _, movable := range enemies {
 				movable.Draw()
-				info += movable.GetStat()
 			}
 
 			rl.DrawText(info, 20, 650, 20, rl.Blue)

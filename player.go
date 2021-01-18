@@ -1,7 +1,7 @@
 package main
 
 import (
-	rl "github.com/gen2brain/raylib-go/raylib"
+	"github.com/gen2brain/raylib-go/raylib"
 	"strconv"
 )
 
@@ -13,6 +13,14 @@ type Player struct {
 	position      rl.Vector2
 	speed         rl.Vector2
 	texture       rl.Texture2D
+}
+
+func (p *Player) SetTarget(rl.Vector2) {
+
+}
+
+func (p *Player) SetDefaultTarget() {
+
 }
 
 func (p *Player) Update() {
