@@ -47,19 +47,19 @@ func (p *Player) Update() {
 }
 
 func (p *Player) ProcessInput() {
-	if rl.IsKeyDown(rl.KeyW) {
+	if rl.IsKeyDown(rl.KeyW) && p.speed.Y == 0 {
 		p.speed.X = 0
 		p.speed.Y = -1
 	}
-	if rl.IsKeyDown(rl.KeyS) {
+	if rl.IsKeyDown(rl.KeyS) && p.speed.Y == 0 {
 		p.speed.X = 0
 		p.speed.Y = 1
 	}
-	if rl.IsKeyDown(rl.KeyA) {
+	if rl.IsKeyDown(rl.KeyA) && p.speed.X == 0 {
 		p.speed.X = -1
 		p.speed.Y = 0
 	}
-	if rl.IsKeyDown(rl.KeyD) {
+	if rl.IsKeyDown(rl.KeyD) && p.speed.X == 0 {
 		p.speed.X = 1
 		p.speed.Y = 0
 	}
