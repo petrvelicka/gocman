@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	rl "github.com/gen2brain/raylib-go/raylib"
+	"github.com/gen2brain/raylib-go/raylib"
 	"math"
 )
 
@@ -59,7 +58,6 @@ func (e *Enemy) Update() {
 			change.Y = 0
 		}
 	}
-	fmt.Println(bestDistance, e.target, e.position, change)
 
 	if change.X+change.Y != 0 {
 		e.speed.X = change.X
