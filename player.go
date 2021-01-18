@@ -31,6 +31,10 @@ func (p *Player) Update() {
 		}
 	} else if next == ENEMY {
 		p.lives -= 1
+		p.score -= 100
+		if p.score < 0 {
+			p.score = 0
+		}
 		p.lvl.state[int(p.position.Y)][int(p.position.X)] = EMPTY
 		p.position = p.startPosition
 		if p.lives == 0 {
