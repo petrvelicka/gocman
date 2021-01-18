@@ -47,6 +47,7 @@ func (p *Player) Update() {
 		}
 		p.lvl.state[int(p.position.Y)][int(p.position.X)] = EMPTY
 		p.position = p.startPosition
+		p.speed = rl.Vector2{X: 0, Y: 0}
 		if p.lives == 0 {
 			p.lvl.gameState = FINISHED
 		}
